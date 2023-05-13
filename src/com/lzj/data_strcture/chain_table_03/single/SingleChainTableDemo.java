@@ -1,7 +1,5 @@
 package com.lzj.data_strcture.chain_table_03.single;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
@@ -17,7 +15,7 @@ public class SingleChainTableDemo {
         boolean flag = false;  // 记录是否结束
         int i = 0;  // 记录位置
         while (!flag) {
-            System.out.println("请输入对应操作编号：A：添加、SA：顺序添加、L：遍历、U：修改、D：删除、P1：总数、P2：倒数第k个节点、P3：反转、P4：末尾打印、B：结束");
+            System.out.println("请输入对应操作编号：A：添加、SA：顺序添加、L：遍历、U：修改、D：删除、P1：总数、P2：倒数第k个节点、P3：反转、P4：末尾打印、P5：合并有序列表、B：结束");
             String b = scanner.next();  // 记录操作
             switch (b) {
                 case "A":  // 添加
@@ -91,6 +89,34 @@ public class SingleChainTableDemo {
 }
 
 class SingleChainTable {
+
+    public static void main(String[] args) {
+        SingleChainTable s1 = new SingleChainTable();
+        int arr1[] = {1, 2, 3, 7, 13, 16, 34};
+        ObjectDeno temp1 = s1.head;
+        for (int i = 0; i < arr1.length; i++) {
+            ObjectDeno o = new ObjectDeno(arr1[i], "位置" + arr1[i]);
+            temp1.next = o;
+            temp1 = o;
+        }
+        System.out.println("master节点。。。。。");
+        s1.list();
+        System.out.println("--------------------------------------------");
+        SingleChainTable s2 = new SingleChainTable();
+        int arr2[] = {3, 15, 22, 34, 45};
+        ObjectDeno temp2 = s2.head;
+        for (int i = 0; i < arr2.length; i++) {
+            ObjectDeno o = new ObjectDeno(arr2[i], "位置" + arr2[i]);
+            temp2.next = o;
+            temp2 = o;
+        }
+        System.out.println("merge节点。。。。。");
+        s2.list();
+        System.out.println("--------------------------------------------");
+        System.out.println("合并后的节点。。。。。");
+        s1.p5(s2);
+        s1.list();
+    }
 
     /**
      * 头节点
@@ -377,39 +403,41 @@ class SingleChainTable {
      */
     public void p5(SingleChainTable merge) {
         // 判断链表是否已有节点
-        if (null == head.next || null == merge.head) {  // 无节点
+        if (null == head.next || null == merge.head.next) {  // 无节点
             System.out.println("还未添加任何节点。。。");
             return;
         }
-        ObjectDeno changeBeforeNext;  // 记录变换前的下一个节点
-        ObjectDeno changeAfterNext;  // 记录变化后的下一个节点
-        ObjectDeno recordMaster = head.next;  // 记录主链表连续的最后一个节点
-        boolean flag = false;  // 记录是否结束所有循环
-        for (ObjectDeno temp = recordMaster; null != temp; temp = temp.next.next) {
-            ObjectDeno recordMerge = merge.head.next;  // 记录merge连续的最后一个节点
-            for (ObjectDeno mergeTemp = recordMerge; null != mergeTemp; mergeTemp = mergeTemp.next) {
-                if (temp.no > mergeTemp.no) {
-                    // 往前移动
-                    recordMaster = mergeTemp = mergeTemp.next;
-                } else if (temp.next.no > mergeTemp.no) {
-                    // 往前移动
-                    recordMaster = temp = temp.next;
-                } else {
-                    changeBeforeNext = temp.next;
-                    changeAfterNext = mergeTemp.next;
-                    temp.next = mergeTemp;
-                    mergeTemp.next = changeBeforeNext;
-                    merge.head.next = changeAfterNext;
-                    break;  // 结束当前循环
-                }
-                if (null == mergeTemp.next){
-                    flag = true;
-                }
-            }
-            if (flag){
+        ObjectDeno masterPrev = head;  // 主表的上一个节点
+        ObjectDeno mergePrev;  // 被合并表的上一个节点
+        ObjectDeno mergeNext = merge.head.next;  // 被合并表的下一个节点
+        boolean flag = false;  // 是否立即结束
+        for (ObjectDeno temp = head.next; null != temp; temp = temp.next) {
+            if (null == mergeNext || flag) {  // 存在一个链表的节点已被全部遍历
                 break;
             }
+            for (ObjectDeno mergeTemp = mergeNext; null != mergeTemp; ) {
+                // 存在多个节点小于等于mergeTemp节点
+                if (temp.no <= mergeTemp.no) {
+                    masterPrev = temp;
+                    if (null == temp.next) {  // 已遍历完所有节点
+                        temp.next = mergeTemp;  // 将最后一个节点的下一个节点指向比它大的节点
+                        flag = true;  // 结束遍历
+                    }
+                    break;
+                }
+                masterPrev.next = mergeTemp;
+                mergePrev = mergeTemp;
+                // 存在多个节点小于等于temp节点
+                for (mergeTemp = mergeTemp.next; null != mergeTemp && mergeTemp.no <= temp.no; mergeTemp = mergeTemp.next) {
+                    mergePrev = mergeTemp;
+                }
+                mergePrev.next = temp;
+                mergeNext = mergeTemp;
+            }
         }
+        // 将被合并的链表头节点的下一个指针置为null
+        merge.head.next = null;
     }
+
 
 }
