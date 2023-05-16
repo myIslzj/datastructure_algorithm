@@ -10,7 +10,7 @@ public class LoopSingleChainTableDemo {
         LoopSingleChainTable l = new LoopSingleChainTable();
         // 添加
         for (int i = 1; i <= 5; i++) {
-            LoopObjectDeno o = new LoopObjectDeno(i, "位置：" + i);
+            LoopObjectDemo o = new LoopObjectDemo(i, "位置：" + i);
             l.add(o);
         }
         // 打印
@@ -32,14 +32,14 @@ class LoopSingleChainTable {
     /**
      * 节点对象
      */
-    LoopObjectDeno node;
+    LoopObjectDemo node;
 
     /**
      * 添加节点
      *
      * @return
      */
-    public boolean add(LoopObjectDeno node) {
+    public boolean add(LoopObjectDemo node) {
         // 判断链表是否已有节点
         if (null == this.node) {  // 链表无节点，添加节点，并将当前节点下一个指向它自己形成环
             this.node = node;
@@ -47,7 +47,7 @@ class LoopSingleChainTable {
             return true;
         }
         // 链表已有节点，遍历找到未节点
-        LoopObjectDeno temp = this.node;
+        LoopObjectDemo temp = this.node;
         while (temp.next != this.node) {
             temp = temp.next;
         }
@@ -63,7 +63,7 @@ class LoopSingleChainTable {
         if (null == node) {
             System.out.println("链表还未添加任何节点！！！");
         }
-        LoopObjectDeno temp = node;
+        LoopObjectDemo temp = node;
         while (true) {
             System.out.println(temp);
             if (temp.next == node) {
@@ -92,8 +92,8 @@ class LoopSingleChainTable {
             return;
         }
 
-        LoopObjectDeno temp = node;  // 记录需要出队的人
-        LoopObjectDeno prev = node;  // 记录需要出队的前一个节点
+        LoopObjectDemo temp = node;  // 记录需要出队的人
+        LoopObjectDemo prev = node;  // 记录需要出队的前一个节点
         // 特殊情况：k=1, m=1
         if (1 == k && k == m) {
             do {
@@ -135,7 +135,7 @@ class LoopSingleChainTable {
             return 0;
         }
         int count = 1;
-        LoopObjectDeno temp = node;
+        LoopObjectDemo temp = node;
         while (temp.next != node) {
             temp = temp.next;
             count++;
@@ -149,7 +149,7 @@ class LoopSingleChainTable {
 /**
  * 节点对象
  */
-class LoopObjectDeno {
+class LoopObjectDemo {
 
     /**
      * no  -->  编号
@@ -158,18 +158,18 @@ class LoopObjectDeno {
      */
     Integer no;
     String data;
-    LoopObjectDeno next;
+    LoopObjectDemo next;
 
     /**
      * 无参构造函数
      */
-    public LoopObjectDeno() {
+    public LoopObjectDemo() {
     }
 
     /**
      * 有参构造函数
      */
-    public LoopObjectDeno(int no, String data) {
+    public LoopObjectDemo(int no, String data) {
         this.no = no;
         this.data = data;
     }
