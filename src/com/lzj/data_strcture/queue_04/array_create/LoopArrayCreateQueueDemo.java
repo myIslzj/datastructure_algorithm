@@ -1,4 +1,4 @@
-package com.lzj.data_strcture.queue.array_create;
+package com.lzj.data_strcture.queue_04.array_create;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -11,7 +11,7 @@ import java.util.Scanner;
  * （3）队列满时：(rear + 1) % maxSize = front
  * （4）队列为空：rear == front
  * （5）队列有效数据个数：(rear + maxSize - front) % maxSize
- * 缺点：rear不断增大，存在数值越界风险，实现复杂度高
+ * 缺点：rear不断增大，存在数值越界风险，不能将队列添满
  * 实现方式二：front、rear比对法
  * （1）不需要设置辅助位
  * （2）初始化时：front = 0, rear = 0
@@ -24,14 +24,17 @@ import java.util.Scanner;
 public class LoopArrayCreateQueueDemo {
     public static void main(String[] args) {
 
-        LoopArrayCreateQueue_1 queue = new LoopArrayCreateQueue_1(5);
+        // 实现方式一
+//        LoopArrayCreateQueue_1 queue = new LoopArrayCreateQueue_1(5);
+        // 实现方式二
+        LoopArrayCreateQueue_2 queue = new LoopArrayCreateQueue_2(5);
         Scanner s = new Scanner(System.in);
         while (true) {
             System.out.println("请输入操作，1：入队、2：出队");
             int i = s.nextInt();
             switch (i) {
                 case 1:
-                    int num = new Random().nextInt(5);
+                    int num = (new Random().nextInt(5)) + 1;
                     queue.enq(num);
                     break;
                 case 2:
@@ -106,7 +109,7 @@ class LoopArrayCreateQueue_2 {
 
     int[] arr;  // 数组对象
     int maxSize;  // 最大长度
-    int front = -1;  // 出队元素下标，-1表示无可出队元素
+    int front = 0;  // 出队元素下标，默认0号位
     int rear = 0;  // 入队元素下标，默认0号位
     boolean isLoop;  // 是否已形成环
 
@@ -126,17 +129,17 @@ class LoopArrayCreateQueue_2 {
      * @return
      */
     public boolean enq(int e) {
+        if (rear == maxSize){  // 已添加到末尾
+            rear = 0;  // 重置入队位为起始位置，形成环
+            isLoop = true;  // 标志已形成环
+        }
         // 判断队列是否已满
-        if (arr == null || (!isLoop && rear - front == maxSize) || (isLoop && rear == front)) {
+        if (arr == null || isLoop && rear == front) {
             System.out.println("队列已满。。。。");
-            if (rear == maxSize){  // 已添加到末尾
-                rear = 0;  // 重置添加位为起始位置，形成环
-                isLoop = true;
-            }
             return false;
         }
-        arr[rear] = e;  // 元素入队
-        rear++;  // 入队下标后移，准备下一个入队元素的位置
+        arr[rear++] = e;  // 元素入队，入队下标后移，准备下一个入队元素的位置
+        System.out.println("入队元素：" + e + " ++后的下标：" + rear);
         return true;
     }
 
@@ -147,12 +150,15 @@ class LoopArrayCreateQueue_2 {
      */
     public boolean deq() {
         // 判断是否有可出队元素
-        if (front == -1 || front == maxSize) {
+        if (arr == null || (!isLoop && front == rear)) {
             System.out.println("队列无可出队元素。。。。");
             return false;
         }
         System.out.println(arr[front] + "出队");
-        front++;
+        if (++front == maxSize){  // 已读取到末尾
+            front = 0;  // 重置出队位为起始位置，形成环
+            isLoop = false;  // 标志环解除
+        }
         return true;
     }
 
