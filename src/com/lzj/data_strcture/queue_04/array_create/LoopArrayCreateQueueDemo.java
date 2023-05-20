@@ -134,7 +134,7 @@ class LoopArrayCreateQueue_2 {
             isLoop = true;  // 标志已形成环
         }
         // 判断队列是否已满
-        if (arr == null || isLoop && rear == front) {
+        if (arr == null || (isLoop && rear == front)) {
             System.out.println("队列已满。。。。");
             return false;
         }
