@@ -1,4 +1,4 @@
-package com.lzj.data_strcture.queue_04.array_create;
+package com.lzj.data_stracture.queue_04.array_create;
 
 import java.util.Random;
 import java.util.Scanner;

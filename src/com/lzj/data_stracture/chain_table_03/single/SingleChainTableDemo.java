@@ -1,4 +1,4 @@
-package com.lzj.data_strcture.chain_table_03.single;
+package com.lzj.data_stracture.chain_table_03.single;
 
 import java.util.Random;
 import java.util.Scanner;

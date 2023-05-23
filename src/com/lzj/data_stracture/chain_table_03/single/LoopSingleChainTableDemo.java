@@ -1,4 +1,4 @@
-package com.lzj.data_strcture.chain_table_03.single;
+package com.lzj.data_stracture.chain_table_03.single;
 
 /**
  * 环形单链表数据结构演示案例
